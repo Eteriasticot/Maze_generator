@@ -140,4 +140,6 @@ def plot_path_result(n:int, m:int, K:int):
 
 Start_time = datetime.now()
 
-plot_path_result(17, 14, 2000)
+plot_path_result(15, 15, 3000)
+
+# I need to add a function to plot the walls
