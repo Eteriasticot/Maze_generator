@@ -68,7 +68,6 @@ def core_init(n:int, m:int):
 
 ''' Transformation of previous configuration '''
 # Need to add a cache core to reduce the number of iterations needed
-# just testing somethign
 def transformation(corei:tuple, corec:tuple, path:list, n:int, m:int, adj:dict):
     moves = adjacency(n, m)[corei]
     coref = rd.choice(moves)
