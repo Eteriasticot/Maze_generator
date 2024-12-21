@@ -67,33 +67,33 @@ def core_init(n:int, m:int):
 
 
 ''' Transformation of previous configuration '''
-# Need to add a cache core to reduce the number of iterations needed
-def transformation(corei:tuple, corec:tuple, path:list, n:int, m:int, adj:dict):
+def transformation(corei:tuple, path:list, n:int, m:int, adj:dict, corec:tuple):
     moves = adjacency(n, m)[corei]
     coref = rd.choice(moves)
     path.append((corei,coref))
     for i in adj[coref]:
         try:
-            path.remove(i)
+            path.remove((coref, i))
         except:
             pass
-    return coref, path
+    return coref, path, corei
     
 def final_config(n:int, m:int, K:int):
     adj = adjacency(n, m)
     path = start_config(n,m)[0]
     core = core_init(n, m)[1]
+    cache = core_init(n, m)[1]
     for i in range(K):
         print("    "+str(i+1)+"/"+str(K)+"    ", end='\r')
         sys.stdout.flush()
-        core, path = transformation(core, path, n, m, adj)
+        core, path, cache = transformation(core, path, n, m, adj, cache)
+    print("    "+str(K)+"/"+str(K)+"    ")
     return core, path
 
 
 ''' Some optimization '''
 def path_reformat(path:list, core:tuple):
     vend, vstart = [i[1] for i in path], [i[0]for i in path]
-    print(len(path))
     roots = [i for i in vstart if i not in vend]
     plot_paths = {}
     for i in range(len(roots)):
@@ -108,11 +108,12 @@ def path_reformat(path:list, core:tuple):
                     roots[i]=k[1]
                     break
         plot_paths[i].append(core)
+    print("    "+str(len(roots))+"/"+str(len(roots))+"    ")
     return plot_paths
 
 
 ''' Plotting labyrinth '''
-def plot_result(n:int, m:int, K:int):
+def plot_path_result(n:int, m:int, K:int):
     print("Calculating path . . .")
     core, path = final_config(n, m, K)
     print("Optimizing path plotting . . .")
@@ -127,15 +128,16 @@ def plot_result(n:int, m:int, K:int):
     plt.axis('off')
     for i in plot_path:
         xi, yi = [], []
-        for j in i:
+        for j in plot_path[i]:
             xi.append(j[0])
             yi.append(j[1])
         plt.plot(xi, yi, color = 'cyan')
     plt.plot(x, y, linestyle = '', marker = 'o')
     plt.plot(core[0], core[1], linestyle = '', marker = 'o', color = 'red')
+    print("Exec time :", datetime.now()-Start_time)
     plt.show()
+    
 
-print(len(start_config(8, 13)[0]))
-print(len(final_config(8, 13, 1)[1]))
-print(len(final_config(8, 13, 10)[1]))
-print(len(final_config(8, 13, 100)[1]))
+Start_time = datetime.now()
+
+plot_path_result(17, 14, 2000)
