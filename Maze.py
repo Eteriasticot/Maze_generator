@@ -102,6 +102,7 @@ def path_reformat(path:list, core:tuple):
     plot_paths = {}
     for i in range(len(roots)):
         print("    "+str(i+1)+"/"+str(len(roots))+"    ", end='\r')
+        adc = True
         while roots[i]!=core:
             if i in plot_paths:
                 plot_paths[i].append(roots[i])
@@ -111,7 +112,16 @@ def path_reformat(path:list, core:tuple):
                 if k[0]==roots[i]:
                     roots[i]=k[1]
                     break
-        plot_paths[i].append(core)
+            for j in range(i):
+                if roots[i] in plot_paths[j]:
+                    plot_paths[i].append(roots[i])
+                    adc = False
+                    break
+            else:
+                continue
+            break
+        if adc:
+            plot_paths[i].append(core)
     print("    "+str(len(roots))+"/"+str(len(roots))+"    ")
     return plot_paths
 
