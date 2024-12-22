@@ -69,7 +69,11 @@ def core_init(n:int, m:int):
 ''' Transformation of previous configuration '''
 def transformation(corei:tuple, path:list, n:int, m:int, adj:dict, corec:tuple):
     moves = adjacency(n, m)[corei]
-    coref = rd.choice(moves)
+    if corei==corec:
+        coref = rd.choice(moves)
+    else:
+        moves.remove(corec)
+        coref = rd.choice(moves)
     path.append((corei,coref))
     for i in adj[coref]:
         try:
@@ -82,7 +86,7 @@ def final_config(n:int, m:int, K:int):
     adj = adjacency(n, m)
     path = start_config(n,m)[0]
     core = core_init(n, m)[1]
-    cache = core_init(n, m)[1]
+    cache = tuple([i for i in core])
     for i in range(K):
         print("    "+str(i+1)+"/"+str(K)+"    ", end='\r')
         sys.stdout.flush()
@@ -140,6 +144,6 @@ def plot_path_result(n:int, m:int, K:int):
 
 Start_time = datetime.now()
 
-plot_path_result(15, 15, 3000)
+plot_path_result(17, 20, 2000)
 
 # I need to add a function to plot the walls
