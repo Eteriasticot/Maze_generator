@@ -11,14 +11,14 @@ from datetime import datetime
 ### Rectangle
 ''' Important variables definition '''
 
-dir = [(1, 0): 'r', (-1, 0):'l', (0, 1);'u', (0, -1):'d'}
+dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d'}
 
 ''' Grid setup'''
 def r_grid(n:int, m:int):
     r = []
     for i in range(m):
         for j in range(n):
-            r.append((j, i))
+            r.append((j+1, i+1))
     return r
 
 ''' Adjacencies setup '''
@@ -37,9 +37,11 @@ def adjacencies(n:int, m:int):
 ''' Plotting '''
 def grid_plot(n:int, m:int):
     nodes = r_grid(n, m)
-    x = [i[0] for i in nodes]
-    y = [i[1] for i in nodes]
-    plt.plot(x, y, color = 'cyan', linestyle = 'None', marker = 'o')
+    fig = plt.figure()
+    fig.set_facecolor('black')
+    plt.axis('off')
+    for i in nodes:
+        plt.plot(i[1], -i[0], color = 'cyan', linestyle = 'None', marker = 'o')
     plt.show()
 
-grid_plot(1, 5)
+grid_plot(4, 5)
