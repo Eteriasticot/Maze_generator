@@ -11,11 +11,11 @@ from datetime import datetime
 ### Rectangle
 ''' Important variables definition '''
 
-dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d'}
-coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1)}
+dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d', (0, 0):'n'}
+coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1), 'n':(0, 0)}
 
 ''' Grid setup'''
-def r_grid(n:int, m:int):
+def r_grid(n:int, m:int) -> list:
     r = []
     for i in range(m):
         for j in range(n):
@@ -23,31 +23,54 @@ def r_grid(n:int, m:int):
     return r
 
 ''' Adjacencies setup '''
-def adjacencies(n:int, m:int):
-    adj = {}
+def adjacencies(n:int, m:int) -> dict:
+    adj = dict()
     nodes = r_grid(n, m)
     for i in nodes:
         for j in dir:
             if (i[0]+j[0], i[1]+j[1]) in nodes:
                 if i in adj:
-                    adj[i].append((i[0]+j[0], i[1]+j[1]))
+                    adj[i].append(dir[j])
                 else:
-                    adj[i] = [(i[0]+j[0], i[1]+j[1])]
+                    adj[i] = [dir[j]]
     return adj
 
 ''' Initial configuration '''
-def config_init(n:int, m:int):
-    
-    return
+def config_init(n:int, m:int) -> dict:
+    adj = adjacencies(n, m)
+    config = {}
+    for i in adj:
+        if 'r' in adj[i]:
+            config[i] = 'r'
+        elif 'd' in adj[i]:
+            config[i] = 'd'
+        else:
+            config[i] = 'n'
+    return config
+
+''' Transformation '''
+def transformation(config:dict, adj:dict) -> dict:
+    config_f = config
+    for i in config_f:
+        if config_f[i] == 'n':
+            config_f[i] = rd.choice(adj[i])
+            config_f[(i[0]+coor[config_f[i]][0], i[1]+coor[config_f[i]][1])]='n'
+    return config_f
 
 ''' Plotting '''
-def grid_plot(n:int, m:int):
-    nodes = r_grid(n, m)
+def grid_plot(n:int, m:int, k:int):
+    nodes = config_init(n, m)
+    adj = adjacencies(n, m)
+    for i in range(k):
+        print("   ", i+1, "/", k, "   ", end = '\r')
+        nodes = transformation(nodes, adj)
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
     for i in nodes:
-        plt.plot(i[1], -i[0], color = 'cyan', linestyle = 'None', marker = 'o')
+        plt.plot(i[0], i[1], color = 'cyan', linestyle = 'None', marker = 'o')
+        plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, length_includes_head = True)
     plt.show()
 
-grid_plot(4, 5)
+
+grid_plot(20, 20, 4000)
