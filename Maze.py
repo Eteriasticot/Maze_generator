@@ -13,6 +13,7 @@ from datetime import datetime
 
 dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d', (0, 0):'n'}
 coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1), 'n':(0, 0)}
+cell = 9
 
 ''' Grid setup'''
 def r_grid(n:int, m:int) -> list:
@@ -58,7 +59,7 @@ def transformation(config:dict, adj:dict) -> dict:
     return config_f
 
 ''' Plotting '''
-def grid_plot(n:int, m:int, k:int):
+def path_plot(n:int, m:int, k:int):
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
     for i in range(k):
@@ -73,4 +74,4 @@ def grid_plot(n:int, m:int, k:int):
     plt.show()
 
 
-grid_plot(20, 20, 4000)
+path_plot(20, 20, 4000)
