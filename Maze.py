@@ -12,6 +12,7 @@ from datetime import datetime
 ''' Important variables definition '''
 
 dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d'}
+coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1)}
 
 ''' Grid setup'''
 def r_grid(n:int, m:int):
@@ -33,6 +34,11 @@ def adjacencies(n:int, m:int):
                 else:
                     adj[i] = [(i[0]+j[0], i[1]+j[1])]
     return adj
+
+''' Initial configuration '''
+def config_init(n:int, m:int):
+    
+    return
 
 ''' Plotting '''
 def grid_plot(n:int, m:int):
