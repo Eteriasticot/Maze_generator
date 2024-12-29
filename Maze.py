@@ -71,7 +71,8 @@ def path_plot(n:int, m:int, k:int):
     for i in nodes:
         plt.plot(i[0], i[1], color = 'cyan', linestyle = 'None', marker = 'o')
         plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
+    print("Exec time :", datetime.now()-Start_time)
     plt.show()
 
-
-path_plot(15, 15, 100000)
+Start_time = datetime.now()
+path_plot(100, 100, 100000)
