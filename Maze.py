@@ -119,4 +119,4 @@ def im_plot(pic:list):
     plt.imshow(pic)
     plt.show()
 
-im_plot(im_path(100, 100, 130000))
+im_plot(im_path(15, 15, 15000))
