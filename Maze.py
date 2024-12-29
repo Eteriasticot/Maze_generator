@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 import random as rd
-import sys
-from datetime import datetime
 
 '''
     The objective of this code is to generate and display (or maybe even save as a picture) a labyrinth.
@@ -71,7 +69,6 @@ def path_plot(n:int, m:int, k:int):
     for i in nodes:
         plt.plot(i[0], i[1], color = 'cyan', linestyle = 'None', marker = 'o')
         plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
-    print("Exec time :", datetime.now()-Start_time)
     plt.show()
     
 ''' Image generation '''
@@ -118,5 +115,13 @@ def im_plot(pic:list):
     plt.axis('off')
     plt.imshow(pic)
     plt.show()
+    
+    
+''' Animating transformations '''
+def animation(n:int, m:int, k:int):
+    
+    
+    return
+
 
 im_plot(im_path(15, 15, 15000))
