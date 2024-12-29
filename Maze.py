@@ -70,8 +70,8 @@ def path_plot(n:int, m:int, k:int):
     plt.axis('off')
     for i in nodes:
         plt.plot(i[0], i[1], color = 'cyan', linestyle = 'None', marker = 'o')
-        plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, length_includes_head = True)
+        plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
     plt.show()
 
 
-path_plot(20, 20, 4000)
+path_plot(15, 15, 100000)
