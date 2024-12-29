@@ -58,7 +58,7 @@ def transformation(config:dict, adj:dict) -> dict:
             config_f[(i[0]+coor[config_f[i]][0], i[1]+coor[config_f[i]][1])]='n'
     return config_f
 
-''' Plotting '''
+''' Plotting path '''
 def path_plot(n:int, m:int, k:int):
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
@@ -73,6 +73,50 @@ def path_plot(n:int, m:int, k:int):
         plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
     print("Exec time :", datetime.now()-Start_time)
     plt.show()
+    
+''' Image generation '''
+def canvas(n:int, m:int) -> list:
+    r = []
+    for i in range(9*n+2):
+        r.append([])
+        for j in range(9*m+2):
+            if (j%9 == 0 or j%9 == 1) or (i%9 == 0 or i%9 == 1):
+                r[-1].append((255, 255, 255))
+            else:
+                r[-1].append((0, 0, 0))
+    return r
 
-Start_time = datetime.now()
-path_plot(100, 100, 100000)
+def im_nodes(n:int, m:int) -> list:
+    c = canvas(n, m)
+    for i in range(n):
+        for j in range(m):
+            c[9*i+5][9*j+5] = (255, 0, 255)
+    return c
+
+def im_path(n:int, m:int, k:int = 4000) -> list:
+    p = im_nodes(n, m)
+    nodes = config_init(n, m)
+    adj = adjacencies(n, m)
+    for i in range(k):
+        print("   ", i+1, "/", k, "   ", end = '\r')
+        nodes = transformation(nodes, adj)
+    for i in nodes:
+        for j in range(9):
+            if coor[nodes[i]][0] == 0:
+                for k in range(7):
+                    p[9*i[0]-k-1][9*i[1]-4+j*coor[nodes[i]][1]] = (0, 0, 0)
+            else:
+                for k in range(7):
+                    p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
+    return p
+
+
+''' Image plotting '''
+def im_plot(pic:list):
+    fig = plt.figure()
+    fig.set_facecolor('black')
+    plt.axis('off')
+    plt.imshow(pic)
+    plt.show()
+
+im_plot(im_path(50, 50, 30000))
