@@ -9,151 +9,114 @@ from datetime import datetime
 '''
 
 ### Rectangle
+''' Important variables definition '''
+
+dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d', (0, 0):'n'}
+coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1), 'n':(0, 0)}
+cell = 9
 
 ''' Grid setup'''
-def r_grid(n:int, m:int):
+def r_grid(n:int, m:int) -> list:
     r = []
     for i in range(m):
         for j in range(n):
-            r.append((j, i))
+            r.append((j+1, i+1))
     return r
 
-def vertices(n:int, m:int):
-    gr = r_grid(n, m)
-    adj = []
-    for i in gr:
-        for j in gr:
-            if ((i[0]-j[0])**2+(i[1]-j[1])**2)==1 and ((j, i) not in adj):
-                adj.append((i, j))
+''' Adjacencies setup '''
+def adjacencies(n:int, m:int) -> dict:
+    adj = dict()
+    nodes = r_grid(n, m)
+    for i in nodes:
+        for j in dir:
+            if (i[0]+j[0], i[1]+j[1]) in nodes:
+                if i in adj:
+                    adj[i].append(dir[j])
+                else:
+                    adj[i] = [dir[j]]
     return adj
-
-def adjacency(n:int, m:int):
-    vert = vertices(n,m)
-    adj = {}
-    for i in vert:
-        if i[0] in adj:
-            adj[i[0]].append(i[1])
-        else : 
-            adj[i[0]] = [i[1]]
-        if i[1] in adj:
-            adj[i[1]].append(i[0])
-        else :
-            adj[i[1]] = [i[0]]
-    return adj
-
 
 ''' Initial configuration '''
-def start_config(n:int, m:int):
-    ad = vertices(n, m)
-    path = []
-    vert_start, vert_end = [], [] 
-    for i in ad:
-        if i[0][1] == i[1][1] and i[0]!=i[1]:
-            path.append(i)
-        elif i[0][0]==n-1 and i[0]!=i[1]:
-            path.append(i)
-    for i in path:
-        vert_start.append(i[0])
-        vert_end.append(i[1])
-    return path, vert_start, vert_end
+def config_init(n:int, m:int) -> dict:
+    adj = adjacencies(n, m)
+    config = {}
+    for i in adj:
+        if 'r' in adj[i]:
+            config[i] = 'r'
+        elif 'd' in adj[i]:
+            config[i] = 'd'
+        else:
+            config[i] = 'n'
+    return config
 
-def core_init(n:int, m:int):
-    p, vstart, vend = start_config(n, m)
-    roots = [i for i in vstart if i not in vend]
-    core = [j for j in vend if j not in vstart][0]
-    roots = list(dict.fromkeys(roots))
-    return roots, core, p
+''' Transformation '''
+def transformation(config:dict, adj:dict) -> dict:
+    config_f = config
+    for i in config_f:
+        if config_f[i] == 'n':
+            config_f[i] = rd.choice(adj[i])
+            config_f[(i[0]+coor[config_f[i]][0], i[1]+coor[config_f[i]][1])]='n'
+    return config_f
 
-
-
-''' Transformation of previous configuration '''
-def transformation(corei:tuple, path:list, n:int, m:int, adj:dict, corec:tuple):
-    moves = adjacency(n, m)[corei]
-    if corei==corec:
-        coref = rd.choice(moves)
-    else:
-        moves.remove(corec)
-        coref = rd.choice(moves)
-    path.append((corei,coref))
-    for i in adj[coref]:
-        try:
-            path.remove((coref, i))
-        except:
-            pass
-    return coref, path, corei
-    
-def final_config(n:int, m:int, K:int):
-    adj = adjacency(n, m)
-    path = start_config(n,m)[0]
-    core = core_init(n, m)[1]
-    cache = tuple([i for i in core])
-    for i in range(K):
-        print("    "+str(i+1)+"/"+str(K)+"    ", end='\r')
-        sys.stdout.flush()
-        core, path, cache = transformation(core, path, n, m, adj, cache)
-    print("    "+str(K)+"/"+str(K)+"    ")
-    return core, path
-
-
-''' Some optimization '''
-def path_reformat(path:list, core:tuple):
-    vend, vstart = [i[1] for i in path], [i[0]for i in path]
-    roots = [i for i in vstart if i not in vend]
-    plot_paths = {}
-    for i in range(len(roots)):
-        print("    "+str(i+1)+"/"+str(len(roots))+"    ", end='\r')
-        adc = True
-        while roots[i]!=core:
-            if i in plot_paths:
-                plot_paths[i].append(roots[i])
-            else:
-                plot_paths[i] = [roots[i]]
-            for k in path:
-                if k[0]==roots[i]:
-                    roots[i]=k[1]
-                    break
-            for j in range(i):
-                if roots[i] in plot_paths[j]:
-                    plot_paths[i].append(roots[i])
-                    adc = False
-                    break
-            else:
-                continue
-            break
-        if adc:
-            plot_paths[i].append(core)
-    print("    "+str(len(roots))+"/"+str(len(roots))+"    ")
-    return plot_paths
-
-
-''' Plotting labyrinth '''
-def plot_path_result(n:int, m:int, K:int):
-    print("Calculating path . . .")
-    core, path = final_config(n, m, K)
-    print("Optimizing path plotting . . .")
-    plot_path = path_reformat(path, core)
-    grid = r_grid(n, m)
-    x = [i[0] for i in grid]
-    y = [i[1] for i in grid]
-    print("Plotting . . .")
-    
-    f = plt.figure()
-    f.patch.set_facecolor('black')
+''' Plotting path '''
+def path_plot(n:int, m:int, k:int):
+    nodes = config_init(n, m)
+    adj = adjacencies(n, m)
+    for i in range(k):
+        print("   ", i+1, "/", k, "   ", end = '\r')
+        nodes = transformation(nodes, adj)
+    fig = plt.figure()
+    fig.set_facecolor('black')
     plt.axis('off')
-    for i in plot_path:
-        xi, yi = [], []
-        for j in plot_path[i]:
-            xi.append(j[0])
-            yi.append(j[1])
-        plt.plot(xi, yi, color = 'cyan')
-    plt.plot(x, y, linestyle = '', marker = 'o')
-    plt.plot(core[0], core[1], linestyle = '', marker = 'o', color = 'red')
+    for i in nodes:
+        plt.plot(i[0], i[1], color = 'cyan', linestyle = 'None', marker = 'o')
+        plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
     print("Exec time :", datetime.now()-Start_time)
     plt.show()
     
+''' Image generation '''
+def canvas(n:int, m:int) -> list:
+    r = []
+    for i in range(9*n+2):
+        r.append([])
+        for j in range(9*m+2):
+            if (j%9 == 0 or j%9 == 1) or (i%9 == 0 or i%9 == 1):
+                r[-1].append((255, 255, 255))
+            else:
+                r[-1].append((0, 0, 0))
+    return r
 
-Start_time = datetime.now()
+def im_nodes(n:int, m:int) -> list:
+    c = canvas(n, m)
+    for i in range(n):
+        for j in range(m):
+            c[9*i+5][9*j+5] = (255, 0, 255)
+    return c
 
-plot_path_result(17, 20, 2000)
+def im_path(n:int, m:int, k:int = 4000) -> list:
+    p = im_nodes(n, m)
+    nodes = config_init(n, m)
+    adj = adjacencies(n, m)
+    for i in range(k):
+        print("   ", i+1, "/", k, "   ", end = '\r')
+        nodes = transformation(nodes, adj)
+    for i in nodes:
+        for j in range(9):
+            if coor[nodes[i]][0] == 0:
+                for k in range(7):
+                    p[9*i[0]-k-1][9*i[1]-4+j*coor[nodes[i]][1]] = (0, 0, 0)
+            else:
+                for k in range(7):
+                    p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
+    return p
 
-# I need to add a function to plot the walls
+
+''' Image plotting '''
+def im_plot(pic:list):
+    fig = plt.figure()
+    fig.set_facecolor('black')
+    plt.axis('off')
+    plt.imshow(pic)
+    plt.show()
+
+im_plot(im_path(100, 100, 130000))
