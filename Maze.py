@@ -117,23 +117,5 @@ def im_plot(pic:list):
     plt.imshow(pic)
     plt.show()
     
-    
-''' Animating transformations '''
-def animation(n:int, m:int, k:int):
-    plt.ion()
-    nodes = config_init(n, m)
-    adj = adjacencies(n, m)
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    fig.set_facecolor('black')
-    plt.axis('off')
-    
-    for i in range(k):
-        print("   ", i+1, "/", k, "   ", end = '\r')
-        nodes = transformation(nodes, adj)
-        fig.canvas.flush_events()
-    
 
-
-animation(15, 15, 5000)
-# im_plot(im_path(15, 15, 15000))
+im_plot(im_path(15, 15, 15000))
