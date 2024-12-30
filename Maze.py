@@ -95,9 +95,10 @@ def im_path(n:int, m:int, k:int = 4000) -> list:
     p = im_nodes(n, m)
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
-    for i in range(k):
-        print("   ", i+1, "/", k, "   ", end = '\r')
-        nodes = transformation(nodes, adj)
+    if k > 0:
+        for i in range(k):
+            print("   ", i+1, "/", k, "   ", end = '\r')
+            nodes = transformation(nodes, adj)
     for i in nodes:
         for j in range(9):
             if coor[nodes[i]][0] == 0:
