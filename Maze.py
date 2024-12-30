@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import random as rd
 
 '''
@@ -119,9 +120,20 @@ def im_plot(pic:list):
     
 ''' Animating transformations '''
 def animation(n:int, m:int, k:int):
+    plt.ion()
+    nodes = config_init(n, m)
+    adj = adjacencies(n, m)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    fig.set_facecolor('black')
+    plt.axis('off')
     
+    for i in range(k):
+        print("   ", i+1, "/", k, "   ", end = '\r')
+        nodes = transformation(nodes, adj)
+        fig.canvas.flush_events()
     
-    return
 
 
-im_plot(im_path(15, 15, 15000))
+animation(15, 15, 5000)
+# im_plot(im_path(15, 15, 15000))
