@@ -69,7 +69,7 @@ def path_plot(n:int, m:int, k:int):
     fig.set_facecolor('black')
     plt.axis('off')
     for i in nodes:
-        plt.plot(i[0], i[1], color = 'cyan', linestyle = 'None', marker = 'o')
+        plt.plot(i[0], i[1], color = 'white', linestyle = 'None', marker = 'o')
         plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
     plt.show()
     
@@ -119,5 +119,5 @@ def im_plot(pic:list):
     plt.imshow(pic)
     plt.show()
     
-
-im_plot(im_path(15, 15, 0))
+path_plot(15, 15, 15000)
+im_plot(im_path(15, 15, 15000))
