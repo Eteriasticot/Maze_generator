@@ -97,12 +97,13 @@ def im_nodes(n:int, m:int) -> list:
     return c
 
 def im_path(n:int, m:int, k:int = 4000) -> list:
+    start_time = time.time()
     p = im_nodes(n, m)
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
     if k > 0:
         for i in range(k):
-            print("   ", i+1, "/", k, "   ", end = '\r')
+            # print("   ", i+1, "/", k, "   ", end = '\r')
             nodes = transformation(nodes, adj)
     for i in nodes:
         for j in range(9):
@@ -112,6 +113,7 @@ def im_path(n:int, m:int, k:int = 4000) -> list:
             else:
                 for k in range(7):
                     p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
+    # print("Image generation : %ss" % (time.time() - start_time))
     return p
 
 
@@ -122,9 +124,25 @@ def im_plot(pic:list):
     fig.set_facecolor('black')
     plt.axis('off')
     plt.imshow(pic)
-    print("Image generation : %ss" % (time.time() - start_time))
+    print("Image Display : %ss" % (time.time() - start_time))
     plt.show()
     
 ''' Testing '''
-im_plot(im_path(15, 15, 1000))
+def Time_test(n:int, m:int, k:int = 4000) -> float:
+    times = list()
+    for i in range(1000):
+        print("Maze n°", i+1, "/", 1000, "  ", end = '\r')
+        st_time = time.time()
+        im_path(n, m, k)
+        times.append(time.time()-st_time)
+    r = 0
+    for i in times:
+        r+=i
+    r = r/len(times)
+    print("Maze of size", n, "x", m, " : ", k/r, "iteration/s")
+
+Time_test(10, 10, 1000)
+
+''' Calling functions to make the maze '''
+# im_plot(im_path(15, 15, 1000))
 # path_plot(15, 15, 1650)
