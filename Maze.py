@@ -61,9 +61,10 @@ def transformation(config:dict, adj:dict) -> dict:
 def path_plot(n:int, m:int, k:int):
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
-    for i in range(k):
-        print("   ", i+1, "/", k, "   ", end = '\r')
-        nodes = transformation(nodes, adj)
+    if k>0:
+        for i in range(k):
+            print("   ", i+1, "/", k, "   ", end = '\r')
+            nodes = transformation(nodes, adj)
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
@@ -119,4 +120,4 @@ def im_plot(pic:list):
     plt.show()
     
 
-im_plot(im_path(15, 15, 15000))
+im_plot(im_path(15, 15, 0))
