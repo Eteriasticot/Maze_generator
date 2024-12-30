@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random as rd
+import time
+
 
 '''
     The objective of this code is to generate and display (or maybe even save as a picture) a labyrinth.
@@ -59,6 +61,7 @@ def transformation(config:dict, adj:dict) -> dict:
 
 ''' Plotting path '''
 def path_plot(n:int, m:int, k:int):
+    start_time = time.time()
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
     if k>0:
@@ -71,6 +74,7 @@ def path_plot(n:int, m:int, k:int):
     for i in nodes:
         plt.plot(i[0], i[1], color = 'white', linestyle = 'None', marker = 'o')
         plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
+    print("Path plotting : %ss" % (time.time() - start_time))
     plt.show()
     
 ''' Image generation '''
@@ -113,11 +117,14 @@ def im_path(n:int, m:int, k:int = 4000) -> list:
 
 ''' Image plotting '''
 def im_plot(pic:list):
+    start_time = time.time()
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
     plt.imshow(pic)
+    print("Image generation : %ss" % (time.time() - start_time))
     plt.show()
     
-path_plot(15, 15, 2000)
-im_plot(im_path(15, 15, 2000))
+''' Testing '''
+im_plot(im_path(15, 15, 1000))
+# path_plot(15, 15, 1650)
