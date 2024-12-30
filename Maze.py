@@ -28,7 +28,7 @@ def adjacencies(n:int, m:int) -> dict:
     nodes = r_grid(n, m)
     for i in nodes:
         for j in dir:
-            if (i[0]+j[0], i[1]+j[1]) in nodes:
+            if ((i[0]+j[0], i[1]+j[1]) in nodes) and (dir[j]!='n'):
                 if i in adj:
                     adj[i].append(dir[j])
                 else:
@@ -119,5 +119,5 @@ def im_plot(pic:list):
     plt.imshow(pic)
     plt.show()
     
-path_plot(15, 15, 15000)
-im_plot(im_path(15, 15, 15000))
+path_plot(15, 15, 2000)
+im_plot(im_path(15, 15, 2000))
