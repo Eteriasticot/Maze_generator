@@ -190,7 +190,7 @@ def time_test(k:int) -> dict:
     res /= len(complexities)
     return res
 times = time_test(10)
-print(time)
+print(times)
 
 ''' Calling functions to make the maze '''
 # im_plot(im_path(50, 70))
