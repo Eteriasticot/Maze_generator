@@ -50,6 +50,19 @@ def config_init(n:int, m:int) -> dict:
             config[i] = 'n'
     return config
 
+def o_config_init(n:int, m:int) -> tuple[dict, tuple]:
+    adj = adjacencies(n, m)
+    config = {}
+    for i in adj:
+        if 'r' in adj[i]:
+            config[i] = 'r'
+        elif 'd' in adj[i]:
+            config[i] = 'd'
+        else:
+            config[i] = 'n'
+            origin = i
+    return config, origin
+
 ''' Transformation '''
 def transformation(config:dict, adj:dict) -> dict:
     config_f = config
@@ -58,6 +71,12 @@ def transformation(config:dict, adj:dict) -> dict:
             config_f[i] = rd.choice(adj[i])
             config_f[(i[0]+coor[config_f[i]][0], i[1]+coor[config_f[i]][1])]='n'
     return config_f
+
+def o_transformation(config : dict, adj : dict, core : tuple) -> tuple[dict, tuple]:
+    config[core] = rd.choice(adj[core])
+    core = (core[0]+coor[config[core]][0], core[1]+coor[config[core]][1])
+    config[core] = 'n'
+    return config, core
 
 ''' Plotting path '''
 def path_plot(n:int, m:int, k:int):
@@ -96,14 +115,15 @@ def im_nodes(n:int, m:int) -> list:
             c[9*i+5][9*j+5] = (255, 0, 255)
     return c
 
-def im_path(n:int, m:int, k:int = 4000) -> list:
+def im_path(n:int, m:int, k:bool = True) -> list:
     start_time = time.time()
     p = im_nodes(n, m)
     nodes = config_init(n, m)
     adj = adjacencies(n, m)
-    if k > 0:
-        for i in range(k):
-            # print("   ", i+1, "/", k, "   ", end = '\r')
+    N = n*m*10
+    if k:
+        for i in range(N):
+            print("   ", i+1, "/", N, "   ", end = '\r')
             nodes = transformation(nodes, adj)
     for i in nodes:
         for j in range(9):
@@ -113,7 +133,28 @@ def im_path(n:int, m:int, k:int = 4000) -> list:
             else:
                 for k in range(7):
                     p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
-    # print("Image generation : %ss" % (time.time() - start_time))
+    print("Image generation : %ss" % (time.time() - start_time))
+    return p
+
+def o_im_path(n:int, m:int, k:bool = True) -> list:
+    start_time = time.time()
+    p = im_nodes(n, m)
+    nodes, core = o_config_init(n, m)
+    adj = adjacencies(n, m)
+    N = n*m*15
+    if k:
+        for i in range(N):
+            print("   ", i+1, "/", N, "   ", end = '\r')
+            nodes, core = o_transformation(nodes, adj, core)
+    for i in nodes:
+        for j in range(9):
+            if coor[nodes[i]][0] == 0:
+                for k in range(7):
+                    p[9*i[0]-k-1][9*i[1]-4+j*coor[nodes[i]][1]] = (0, 0, 0)
+            else:
+                for k in range(7):
+                    p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
+    print("Image generation : %ss" % (time.time() - start_time))
     return p
 
 
@@ -141,8 +182,9 @@ def Time_test(n:int, m:int, k:int = 4000) -> float:
     r = r/len(times)
     print("Maze of size", n, "x", m, " : ", k/r, "iteration/s")
 
-Time_test(10, 10, 1000)
+# Time_test(10, 10, 1000)
 
 ''' Calling functions to make the maze '''
-# im_plot(im_path(15, 15, 1000))
+im_plot(im_path(100, 120))
+im_plot(o_im_path(100, 120))
 # path_plot(15, 15, 1650)
