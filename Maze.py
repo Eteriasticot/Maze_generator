@@ -141,7 +141,7 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
     p = im_nodes(n, m)
     nodes, core = o_config_init(n, m)
     adj = adjacencies(n, m)
-    N = n*m*15
+    N = n*m*25
     if k:
         for i in range(N):
             print("   ", i+1, "/", N, "   ", end = '\r')
@@ -155,7 +155,7 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
                 for k in range(7):
                     p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
     timing = time.time() - start_time
-    #print("Image generation : %ss" % timing)
+    print("Image generation : %ss" % timing)
     return p, timing
 
 
@@ -174,6 +174,8 @@ def time_test(k:int) -> dict:
     test_start = time.time()
     sizes = [10*(i+1) for i in range(k)]
     times = dict()
+    complexities = list()
+    res = 0
     for i in sizes:
         for j in sizes:
             if j <= i:
@@ -181,11 +183,16 @@ def time_test(k:int) -> dict:
                 t = o_im_path(i, j)[1]
                 times[(i, j)] = t
     print('\n', time.time() - test_start)
-    return times
+    for i in times:
+        complexities.append(times[i]/(i[0]*i[1]))
+    for j in complexities:
+        res+=i
+    res /= len(complexities)
+    return res
 times = time_test(10)
-print(times)
+print(time)
 
 ''' Calling functions to make the maze '''
 # im_plot(im_path(50, 70))
-# im_plot(o_im_path(50, 70)[0])
+# im_plot(o_im_path(24, 92)[0])
 # path_plot(15, 15, 1650)
