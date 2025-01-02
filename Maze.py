@@ -154,8 +154,9 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
             else:
                 for k in range(7):
                     p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
-    print("Image generation : %ss" % (time.time() - start_time))
-    return p
+    timing = time.time() - start_time
+    #print("Image generation : %ss" % timing)
+    return p, timing
 
 
 ''' Image plotting '''
@@ -169,22 +170,22 @@ def im_plot(pic:list):
     plt.show()
     
 ''' Testing '''
-def Time_test(n:int, m:int, k:int = 4000) -> float:
-    times = list()
-    for i in range(1000):
-        print("Maze n°", i+1, "/", 1000, "  ", end = '\r')
-        st_time = time.time()
-        im_path(n, m, k)
-        times.append(time.time()-st_time)
-    r = 0
-    for i in times:
-        r+=i
-    r = r/len(times)
-    print("Maze of size", n, "x", m, " : ", k/r, "iteration/s")
-
-# Time_test(10, 10, 1000)
+def time_test(k:int) -> dict:
+    test_start = time.time()
+    sizes = [10*(i+1) for i in range(k)]
+    times = dict()
+    for i in sizes:
+        for j in sizes:
+            if j <= i:
+                print('i :', i, '; j :', j, '    ')
+                t = o_im_path(i, j)[1]
+                times[(i, j)] = t
+    print('\n', time.time() - test_start)
+    return times
+times = time_test(10)
+print(times)
 
 ''' Calling functions to make the maze '''
-im_plot(im_path(100, 120))
-im_plot(o_im_path(100, 120))
+# im_plot(im_path(50, 70))
+# im_plot(o_im_path(50, 70)[0])
 # path_plot(15, 15, 1650)
