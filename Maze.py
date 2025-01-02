@@ -186,7 +186,7 @@ def time_test(k:int) -> dict:
     for i in times:
         complexities.append(times[i]/(i[0]*i[1]))
     for j in complexities:
-        res+=i
+        res+=j
     res /= len(complexities)
     return res
 times = time_test(10)
