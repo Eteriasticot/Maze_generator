@@ -155,7 +155,7 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
                 for k in range(7):
                     p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
     timing = time.time() - start_time
-    print("Image generation : %ss" % timing)
+    #print("Image generation : %ss" % timing)
     return p, timing
 
 
