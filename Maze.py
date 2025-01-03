@@ -38,17 +38,6 @@ def adjacencies(n:int, m:int) -> dict:
     return adj
 
 ''' Initial configuration '''
-def config_init(n:int, m:int) -> dict:
-    adj = adjacencies(n, m)
-    config = {}
-    for i in adj:
-        if 'r' in adj[i]:
-            config[i] = 'r'
-        elif 'd' in adj[i]:
-            config[i] = 'd'
-        else:
-            config[i] = 'n'
-    return config
 
 def o_config_init(n:int, m:int) -> tuple[dict, tuple]:
     adj = adjacencies(n, m)
@@ -64,13 +53,6 @@ def o_config_init(n:int, m:int) -> tuple[dict, tuple]:
     return config, origin
 
 ''' Transformation '''
-def transformation(config:dict, adj:dict) -> dict:
-    config_f = config
-    for i in config_f:
-        if config_f[i] == 'n':
-            config_f[i] = rd.choice(adj[i])
-            config_f[(i[0]+coor[config_f[i]][0], i[1]+coor[config_f[i]][1])]='n'
-    return config_f
 
 def o_transformation(config : dict, adj : dict, core : tuple) -> tuple[dict, tuple]:
     config[core] = rd.choice(adj[core])
@@ -115,27 +97,6 @@ def im_nodes(n:int, m:int) -> list:
             c[9*i+5][9*j+5] = (255, 0, 255)
     return c
 
-def im_path(n:int, m:int, k:bool = True) -> list:
-    start_time = time.time()
-    p = im_nodes(n, m)
-    nodes = config_init(n, m)
-    adj = adjacencies(n, m)
-    N = n*m*10
-    if k:
-        for i in range(N):
-            print("   ", i+1, "/", N, "   ", end = '\r')
-            nodes = transformation(nodes, adj)
-    for i in nodes:
-        for j in range(9):
-            if coor[nodes[i]][0] == 0:
-                for k in range(7):
-                    p[9*i[0]-k-1][9*i[1]-4+j*coor[nodes[i]][1]] = (0, 0, 0)
-            else:
-                for k in range(7):
-                    p[9*i[0]-4+j*coor[nodes[i]][0]][9*i[1]-k-1] = (0, 0, 0)
-    print("Image generation : %ss" % (time.time() - start_time))
-    return p
-
 def o_im_path(n:int, m:int, k:bool = True) -> list:
     start_time = time.time()
     p = im_nodes(n, m)
@@ -172,5 +133,5 @@ def im_plot(pic:list):
 
 ''' Calling functions to make the maze '''
 # im_plot(im_path(50, 70))
-im_plot(o_im_path(15, 100)[0])
+im_plot(o_im_path(50, 50)[0])
 # path_plot(15, 15, 1650)
