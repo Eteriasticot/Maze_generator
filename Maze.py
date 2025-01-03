@@ -63,12 +63,12 @@ def o_transformation(config : dict, adj : dict, core : tuple) -> tuple[dict, tup
 ''' Plotting path '''
 def path_plot(n:int, m:int, k:int):
     start_time = time.time()
-    nodes = config_init(n, m)
+    nodes, core = o_config_init(n, m)
     adj = adjacencies(n, m)
     if k>0:
         for i in range(k):
             print("   ", i+1, "/", k, "   ", end = '\r')
-            nodes = transformation(nodes, adj)
+            nodes, core = o_transformation(nodes, adj, core)
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
@@ -132,6 +132,5 @@ def im_plot(pic:list):
 
 
 ''' Calling functions to make the maze '''
-# im_plot(im_path(50, 70))
 im_plot(o_im_path(50, 50)[0])
-# path_plot(15, 15, 1650)
+path_plot(15, 15, 1650)
