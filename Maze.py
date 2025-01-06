@@ -16,6 +16,10 @@ dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d', (0, 0):'n'}
 coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1), 'n':(0, 0)}
 cell = 9
 
+''' Comfort functions '''
+def add(a:tuple, b:tuple) -> tuple:
+    return tuple(i+j for (i, j) in (a, b))
+
 ''' Grid setup'''
 def r_grid(n:int, m:int) -> list:
     r = []
@@ -30,11 +34,11 @@ def adjacencies(n:int, m:int) -> dict:
     nodes = r_grid(n, m)
     for i in nodes:
         for j in dir:
-            if ((i[0]+j[0], i[1]+j[1]) in nodes) and (dir[j]!='n'):
+            if (add(i, j) in nodes) and (dir[(j)]!='n'):
                 if i in adj:
-                    adj[i].append(dir[j])
+                    adj[i].append(dir[(j)])
                 else:
-                    adj[i] = [dir[j]]
+                    adj[i] = [dir[(j)]]
     return adj
 
 ''' Initial configuration '''
