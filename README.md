@@ -10,6 +10,6 @@ For example, this is a perfect maze:
 ## Algorythm
 I used [CaptainLuma](https://www.youtube.com/@captainluma7991)'s maze generation algorithm to make this program. This algorithm is not the fastest but you can stop the algorithm at any point and it will result into a perfect maze.
 
-This algorithm works by editing a perfect maze, so all it needs to start is an initial configuration that will always be a perfect maze, no matter the size. To make sure our maze is perfect, we take a grid of nodes. Each node except one will point to a direction, either up, down, left or right. The idea is that if you start from any point and follow the arrows from point to point, you will end up on the only point that points nowhere, the "origin" of the maze. This looks like this:
+This algorithm works by editing a perfect maze, so all it needs to start is an initial configuration that will always be a perfect maze, no matter the size. To make sure our maze is perfect, we take a grid of nodes. Each node except one will point to a direction, either up, down, left or right. The idea is that if you start from any point and follow the arrows from point to point, you will end up on the only point that points nowhere, the "origin" of the maze. It looks like this:
 
 ![Perfect_maze_path](https://github.com/user-attachments/assets/77c61e63-17b4-46c9-81e0-9f278e82f108)
