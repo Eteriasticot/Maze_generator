@@ -4,6 +4,7 @@ Just a <ins>maze generator</ins> in python. Ideally I'd like to generate differe
 ## Perfect maze
 First of all, we need to define what a perfect maze is. A perfect maze must always have a single path between two of its points. This means a perfect maze can't have isolated areas and can't have any loop.
 For example, this is a perfect maze:
+
 ![Perfect_Maze](https://github.com/user-attachments/assets/c1b779ed-7805-4ea5-ac77-61929b7e798c)
 
 ## Algorythm
