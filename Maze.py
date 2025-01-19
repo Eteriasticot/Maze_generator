@@ -129,5 +129,5 @@ def im_plot(pic:list):
 
 
 ''' Calling functions to make the maze '''
-im_plot(o_im_path(50, 50)[0])
+# im_plot(o_im_path(20, 20)[0])
 # path_plot(15, 15, 1650)
