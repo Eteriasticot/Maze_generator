@@ -14,7 +14,13 @@ import time
 
 dir = {(1, 0): 'r', (-1, 0):'l', (0, 1):'u', (0, -1):'d', (0, 0):'n'}
 coor = {'r':(1, 0), 'l':(-1, 0), 'u':(0, 1), 'd':(0, -1), 'n':(0, 0)}
+opposites = {'r':'l', 'l':'r', 'u':'d', 'd':'u'}
 cell = 9
+
+
+''' Comfort functions '''
+def add_vect(a, b):
+    return (a[0]+b[0], a[1]+b[1])
 
 ''' Grid setup'''
 def r_grid(n:int, m:int) -> list:
@@ -61,6 +67,19 @@ def o_transformation(config : dict, adj : dict, core : tuple) -> tuple[dict, tup
 def origin_switch(config : dict, adj : dict, core : tuple, coref : tuple) -> tuple[dict, tuple]:
     return config, core
 
+
+''' Origin switch try'''
+def origin_switch(maze:dict, init_core:tuple, final_core:tuple) -> tuple:
+    cache = list()
+    core_temp = final_core
+    while core_temp != init_core:
+        cache.append((add_vect(core_temp, coor[maze[core_temp]]), opposites[maze[core_temp]]))
+        core_temp = (core_temp[0]+coor[maze[core_temp]][0], core_temp[1]+coor[maze[core_temp]][1])
+    for i, j in cache:
+        maze[i] = j
+    maze[final_core] = 'n'
+    return maze, final_core
+
 ''' Plotting path '''
 def path_plot(n:int, m:int, k:int):
     start_time = time.time()
@@ -74,10 +93,34 @@ def path_plot(n:int, m:int, k:int):
     fig.set_facecolor('black')
     plt.axis('off')
     for i in nodes:
-        plt.plot(i[0], i[1], color = 'white', linestyle = 'None', marker = 'o')
-        plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'cyan', length_includes_head = True)
+        if nodes[i]!='n':
+            plt.plot(i[0], i[1], color = 'white', linestyle = 'None', marker = 'o')
+            plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'Blue', length_includes_head = True)
+        else:
+            plt.plot(i[0], i[1], color = 'red', linestyle = 'None', marker = 'o')
     print("Path plotting : %ss" % (time.time() - start_time))
     plt.show()
+    return nodes
+
+def path_edit(maze:tuple, adj:dict, k:int=1):
+    start_time = time.time()
+    nodes, core = maze
+    if k>0:
+        for i in range(k):
+            print("   ", i+1, "/", k, "   ", end = '\r')
+            nodes, core = o_transformation(nodes, adj, core)
+    fig = plt.figure()
+    fig.set_facecolor('black')
+    plt.axis('off')
+    for i in nodes:
+        if nodes[i]!='n':
+            plt.plot(i[0], i[1], color = 'white', linestyle = 'None', marker = 'o')
+            plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'Blue', length_includes_head = True)
+        else:
+            plt.plot(i[0], i[1], color = 'red', linestyle = 'None', marker = 'o')
+    print("Path plotting : %ss" % (time.time() - start_time))
+    plt.show()
+    return nodes, core
     
 ''' Image generation '''
 def canvas(n:int, m:int) -> list:
@@ -129,5 +172,12 @@ def im_plot(pic:list):
 
 
 ''' Calling functions to make the maze '''
-# im_plot(o_im_path(20, 20)[0])
-# path_plot(15, 15, 1650)
+# im_plot(o_im_path(8, 8)[0])
+# path_plot(6, 6, 0)
+
+maze, core = o_config_init(6, 6)
+adj = adjacencies(6, 6)
+maze, core = path_edit((maze, core), adj, 0)
+origin_switch(maze, core, (3, 3))
+maze, core = path_edit((maze, core), adj, 0)
+
