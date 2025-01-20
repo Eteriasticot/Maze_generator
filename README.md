@@ -13,3 +13,7 @@ I used [CaptainLuma](https://www.youtube.com/@captainluma7991)'s maze generation
 This algorithm works by editing a perfect maze, so all it needs to start is an initial configuration that will always be a perfect maze, no matter the size. To make sure our maze is perfect, we take a grid of nodes. Each node except one will point to a direction, either up, down, left or right. The idea is that if you start from any point and follow the arrows from point to point, you will end up on the only point that points nowhere, the "origin" of the maze. It looks like this:
 
 ![Perfect_maze_path](https://github.com/user-attachments/assets/77c61e63-17b4-46c9-81e0-9f278e82f108)
+
+Since this algorithm needs a perfect maze to edit, the program needs to be able to make one for every single size. The simplest way to do that is to generate a grid of nodes then calculate adjacencies to know in which directions each node will be able to point. From this structure we make every possible point point to the right, if it can't then we make it point down, and finally if it can't then this node will be the origin of the maze. This is what our initial maze configuration looks like:
+
+![Perfect_maze_init](https://github.com/user-attachments/assets/b31b2888-aacc-45c4-ba4e-0bf33d8f1802)
