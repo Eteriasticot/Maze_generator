@@ -43,9 +43,35 @@ def adjacencies(n:int, m:int) -> dict:
                     adj[i] = [dir[(j)]]
     return adj
 
+def o_adjacencies(n:int, m:int) -> dict:
+    adj = dict()
+    nodes = r_grid(n, m)
+    for i in nodes:
+        if i[0] == 1:
+            if i[1] == 1:
+                adj[i] = ['r', 'u']
+            elif i[1] == m:
+                adj[i] = ['r', 'd']
+            else:
+                adj[i] = ['r', 'u', 'd']
+        elif i[0] == n:
+            if i[1] == 1:
+                adj[i] = ['l', 'u']
+            elif i[1] == m:
+                adj[i] = ['l', 'd']
+            else:
+                adj[i] = ['l', 'u', 'd']
+        elif i[1] == 1:
+            adj[i] = ['r', 'l', 'u']
+        elif i[1] == m:
+            adj[i] = ['r', 'l', 'd']
+        else:
+            adj[i] = ['r', 'l', 'u', 'd']
+    return adj
+
 ''' Initial configuration '''
 def o_config_init(n:int, m:int) -> tuple[dict, tuple]:
-    adj = adjacencies(n, m)
+    adj = o_adjacencies(n, m)
     config = {}
     for i in adj:
         if 'r' in adj[i]:
@@ -55,7 +81,7 @@ def o_config_init(n:int, m:int) -> tuple[dict, tuple]:
         else:
             config[i] = 'n'
             origin = i
-    return config, origin
+    return config, origin, adj
 
 ''' Transformation '''
 def o_transformation(config : dict, adj : dict, core : tuple) -> tuple[dict, tuple]:
@@ -83,8 +109,7 @@ def origin_switch(maze:dict, init_core:tuple, final_core:tuple) -> tuple:
 ''' Plotting path '''
 def path_plot(n:int, m:int, k:int):
     start_time = time.time()
-    nodes, core = o_config_init(n, m)
-    adj = adjacencies(n, m)
+    nodes, core, adj = o_config_init(n, m)
     if k>0:
         for i in range(k):
             print("   ", i+1, "/", k, "   ", end = '\r')
@@ -102,9 +127,9 @@ def path_plot(n:int, m:int, k:int):
     plt.show()
     return nodes
 
-def path_edit(maze:tuple, adj:dict, k:int=1):
+def path_edit(maze:dict, core:tuple, adj:dict, k:int=1):
     start_time = time.time()
-    nodes, core = maze
+    nodes = maze
     if k>0:
         for i in range(k):
             print("   ", i+1, "/", k, "   ", end = '\r')
@@ -137,9 +162,10 @@ def canvas(n:int, m:int) -> list:
 def o_im_path(n:int, m:int, k:bool = True) -> list:
     start_time = time.time()
     p = canvas(n, m)
-    nodes, core = o_config_init(n, m)
-    adj = adjacencies(n, m)
-    N = n*m*15
+    print("Initial configuration generation...", end='\r')
+    nodes, core, adj = o_config_init(n, m)
+    print("Initial configuration generation   DONE")
+    N = n*m*20
     if k:
         for i in range(N):
             print("   ", i+1, "/", N, "   ", end = '\r')
@@ -172,12 +198,13 @@ def im_plot(pic:list):
 
 
 ''' Calling functions to make the maze '''
-# im_plot(o_im_path(8, 8)[0])
+im_plot(o_im_path(1000, 1000)[0])
 # path_plot(6, 6, 0)
 
+'''
 maze, core = o_config_init(6, 6)
-adj = adjacencies(6, 6)
-maze, core = path_edit((maze, core), adj, 0)
-origin_switch(maze, core, (3, 3))
-maze, core = path_edit((maze, core), adj, 0)
-
+adj = o_adjacencies(6, 6)
+maze, core = path_edit(maze, core, adj, 1000)
+maze, core = origin_switch(maze, core, (6, 6))
+maze, core = path_edit(maze, core, adj, 0)
+'''
