@@ -112,7 +112,8 @@ def path_plot(n:int, m:int, k:int):
     nodes, core, adj = o_config_init(n, m)
     if k>0:
         for i in range(k):
-            print("   ", i+1, "/", k, "   ", end = '\r')
+            percentage = str(100*(i+1)/k)+'%'
+            print("   ", i+1, "/", k, "   ", percentage, end = '\r')
             nodes, core = o_transformation(nodes, adj, core)
     fig = plt.figure()
     fig.set_facecolor('black')
@@ -146,6 +147,38 @@ def path_edit(maze:dict, core:tuple, adj:dict, k:int=1):
     print("Path plotting : %ss" % (time.time() - start_time))
     plt.show()
     return nodes, core
+
+def solved_path(maze:dict, core:tuple, adj:dict, k:int=1):
+    start_time = time.time()
+    nodes = maze
+    if k>0:
+        for i in range(k):
+            print("   ", i+1, "/", k, "   ", end = '\r')
+            nodes, core = o_transformation(nodes, adj, core)
+    fig = plt.figure()
+    fig.set_facecolor('black')
+    plt.axis('off')
+    cache = list()
+    node = (1, 1)
+    iteration = 1
+    while node!=core:
+        cache.append(node)
+        print('   ', iteration, '   ', end = '\r')
+        ax, ay = coor[nodes[node]]
+        plt.plot(node[0], node[1], color = 'Green', linestyle = 'None', marker = 'o')
+        plt.arrow(node[0], node[1], ax, ay, width = 0.05, color = 'Green', length_includes_head = True)
+        node = add_vect(node, (ax, ay))
+        iteration += 1
+    print('   ', iteration, ' COMPLETE')
+    for i in nodes:
+        if nodes[i]!='n' and i not in cache:
+            plt.plot(i[0], i[1], color = 'white', linestyle = 'None', marker = 'o')
+            plt.arrow(i[0], i[1], coor[nodes[i]][0], coor[nodes[i]][1], width = 0.05, color = 'Blue', length_includes_head = True)
+        elif nodes[i]=='n':
+            plt.plot(i[0], i[1], color = 'red', linestyle = 'None', marker = 'o')
+    print("Path plotting : %ss" % (time.time() - start_time))
+    plt.show()
+    return nodes, core
     
 ''' Image generation '''
 def canvas(n:int, m:int) -> list:
@@ -157,6 +190,11 @@ def canvas(n:int, m:int) -> list:
                 r[-1].append((255, 255, 255))
             else:
                 r[-1].append((0, 0, 0))
+    for o in range(7):
+        r[9*(m-1)+2+o][1] = (0, 0, 0)
+        r[o+2][9*n] = (0, 0, 0)
+        r[9*(m-1)+2+o][0] = (0, 0, 0)
+        r[o+2][9*n+1] = (0, 0, 0)
     return r
 
 def o_im_path(n:int, m:int, k:bool = True) -> list:
@@ -198,13 +236,12 @@ def im_plot(pic:list):
 
 
 ''' Calling functions to make the maze '''
-im_plot(o_im_path(1000, 1000)[0])
+im_plot(o_im_path(50, 50)[0])
 # path_plot(6, 6, 0)
 
 '''
-maze, core = o_config_init(6, 6)
-adj = o_adjacencies(6, 6)
-maze, core = path_edit(maze, core, adj, 1000)
-maze, core = origin_switch(maze, core, (6, 6))
-maze, core = path_edit(maze, core, adj, 0)
+maze, core, adj = o_config_init(20, 20)
+maze, core = path_edit(maze, core, adj, 5000)
+maze, core = origin_switch(maze, core, (20, 20))
+maze, core = solved_path(maze, core, adj, 0)
 '''
