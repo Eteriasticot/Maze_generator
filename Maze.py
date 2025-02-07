@@ -221,27 +221,14 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
 
 
 ''' Image plotting '''
-def im_plot(pic:list):
-    name = str(input("Image save name : "))
+def im_plot(pic:list, n:int, m:int):
+    name = 'Maze'+str(n)+'x'+str(m)
+    quality = n*m*50
     start_time = time.time()
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
     plt.imshow(pic)
     print("Image Display : %ss" % (time.time() - start_time))
-    n = len(pic)
-    m = len(pic[-1])
-    plt.savefig(name, dpi = n*m)
+    plt.savefig(name = name, dpi = quality, format = 'png')
     plt.show()
-
-
-''' Calling functions to make the maze '''
-im_plot(o_im_path(50, 50)[0])
-# path_plot(6, 6, 0)
-
-'''
-maze, core, adj = o_config_init(20, 20)
-maze, core = path_edit(maze, core, adj, 5000)
-maze, core = origin_switch(maze, core, (20, 20))
-maze, core = solved_path(maze, core, adj, 0)
-'''
