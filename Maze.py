@@ -132,8 +132,7 @@ def path_edit(maze:dict, core:tuple, adj:dict, k:int=1):
     start_time = time.time()
     nodes = maze
     if k>0:
-        for i in range(k):
-            print("   ", i+1, "/", k, "   ", end = '\r')
+        for _ in range(k):
             nodes, core = o_transformation(nodes, adj, core)
     fig = plt.figure()
     fig.set_facecolor('black')
@@ -152,8 +151,7 @@ def solved_path(maze:dict, core:tuple, adj:dict, k:int=1):
     start_time = time.time()
     nodes = maze
     if k>0:
-        for i in range(k):
-            print("   ", i+1, "/", k, "   ", end = '\r')
+        for _ in range(k):
             nodes, core = o_transformation(nodes, adj, core)
     fig = plt.figure()
     fig.set_facecolor('black')
@@ -163,7 +161,6 @@ def solved_path(maze:dict, core:tuple, adj:dict, k:int=1):
     iteration = 1
     while node!=core:
         cache.append(node)
-        print('   ', iteration, '   ', end = '\r')
         ax, ay = coor[nodes[node]]
         plt.plot(node[0], node[1], color = 'Green', linestyle = 'None', marker = 'o')
         plt.arrow(node[0], node[1], ax, ay, width = 0.05, color = 'Green', length_includes_head = True)
@@ -205,8 +202,7 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
     print("Initial configuration generation   DONE")
     N = n*m*20
     if k:
-        for i in range(N):
-            print("   ", i+1, "/", N, "   ", end = '\r')
+        for _ in range(N):
             nodes, core = o_transformation(nodes, adj, core)
     timing = time.time() - start_time
     print("Path generation : %ss" % timing)
@@ -226,12 +222,16 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
 
 ''' Image plotting '''
 def im_plot(pic:list):
+    name = str(input("Image save name : "))
     start_time = time.time()
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
     plt.imshow(pic)
     print("Image Display : %ss" % (time.time() - start_time))
+    n = len(pic)
+    m = len(pic[-1])
+    plt.savefig(name, dpi = n*m)
     plt.show()
 
 
