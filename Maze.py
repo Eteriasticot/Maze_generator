@@ -200,7 +200,7 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
     print("Initial configuration generation...", end='\r')
     nodes, core, adj = o_config_init(n, m)
     print("Initial configuration generation   DONE")
-    N = n*m*20
+    N = n*m*30
     if k:
         for _ in range(N):
             nodes, core = o_transformation(nodes, adj, core)
@@ -221,14 +221,11 @@ def o_im_path(n:int, m:int, k:bool = True) -> list:
 
 
 ''' Image plotting '''
-def im_plot(pic:list, n:int, m:int):
-    name = 'Maze'+str(n)+'x'+str(m)
-    quality = n*m*50
+def im_plot(pic:list):
     start_time = time.time()
     fig = plt.figure()
     fig.set_facecolor('black')
     plt.axis('off')
     plt.imshow(pic)
     print("Image Display : %ss" % (time.time() - start_time))
-    plt.savefig(fname = name, dpi = quality, format = 'png')
     plt.show()
