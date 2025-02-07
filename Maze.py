@@ -230,5 +230,5 @@ def im_plot(pic:list, n:int, m:int):
     plt.axis('off')
     plt.imshow(pic)
     print("Image Display : %ss" % (time.time() - start_time))
-    plt.savefig(name = name, dpi = quality, format = 'png')
+    plt.savefig(fname = name, dpi = quality, format = 'png')
     plt.show()
