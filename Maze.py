@@ -31,18 +31,6 @@ def r_grid(n:int, m:int) -> list:
     return r
 
 ''' Adjacencies setup '''
-def adjacencies(n:int, m:int) -> dict:
-    adj = dict()
-    nodes = r_grid(n, m)
-    for i in nodes:
-        for j in dir:
-            if ((i[0]+j[0], i[1]+j[1]) in nodes) and (dir[(j)]!='n'):
-                if i in adj:
-                    adj[i].append(dir[(j)])
-                else:
-                    adj[i] = [dir[(j)]]
-    return adj
-
 def o_adjacencies(n:int, m:int) -> dict:
     adj = dict()
     nodes = r_grid(n, m)
@@ -89,10 +77,6 @@ def o_transformation(config : dict, adj : dict, core : tuple) -> tuple[dict, tup
     core = (core[0]+coor[config[core]][0], core[1]+coor[config[core]][1])
     config[core] = 'n'
     return config, core
-
-def origin_switch(config : dict, adj : dict, core : tuple, coref : tuple) -> tuple[dict, tuple]:
-    return config, core
-
 
 ''' Origin switch try'''
 def origin_switch(maze:dict, init_core:tuple, final_core:tuple) -> tuple:
